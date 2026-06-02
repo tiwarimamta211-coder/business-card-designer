@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Card Designer Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=Crimson+Pro:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --bg: #0e0f13;
+    --surface: #16181f;
+    --surface2: #1e2029;
+    --border: #2a2d3a;
+    --accent: #f0c040;
+    --accent2: #e07a30;
+    --text: #e8e9ed;
+    --text-muted: #6e7080;
+    --text-dim: #9a9db0;
+    --card-w: 354px;
+    --card-h: 204px;
+    --radius: 12px;
+    --shadow: 0 24px 60px rgba(0,0,0,0.6);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── Header ─── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    letter-spacing: .02em;
+  }
+  .logo span { color: var(--accent); }
+  .header-actions { display: flex; gap: 10px; }
+
+  /* ─── Ads ─── */
+  .ad-banner {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    font-size: .75rem;
+    letter-spacing: .08em;
+  }
+  .ad-top { width: 100%; height: 90px; margin: 12px 0; }
+  .ad-side { width: 160px; min-height: 600px; flex-shrink: 0; }
+
+  /* ─── Layout ─── */
+  .wrapper {
+    display: flex;
+    gap: 0;
+    min-height: calc(100vh - 57px);
+  }
+
+  /* ─── Sidebar ─── */
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .section-label {
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin: 18px 0 10px;
+  }
+  .section-label:first-child { margin-top: 0; }
+
+  /* Tabs */
+  .tab-row {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 6px 10px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .8rem;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all .2s;
+  }
+  .tab-btn.active {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  /* Form controls */
+  label.ctrl-label {
+    display: block;
+    font-size: .72rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+  .ctrl-group { margin-bottom: 12px; }
+
+  input[type=text], input[type=email], input[type=tel], select, textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 7px 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  input[type=text]:focus, input[type=email]:focus,
+  input[type=tel]:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  textarea { resize: vertical; min-height: 60px; }
+
+  select option { background: #1e2029; }
+
+  input[type=range] {
+    width: 100%;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+  input[type=color] {
+    width: 36px; height: 28px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  .color-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .color-swatch {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform .15s, border-color .15s;
+  }
+  .color-swatch:hover { transform: scale(1.2); }
+  .color-swatch.active { border-color: var(--accent); }
+
+  /* Alignment buttons */
+  .btn-group { display: flex; gap: 4px; }
+  .icon-btn {
+    padding: 6px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: .85rem;
+    transition: all .2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover, .icon-btn.active {
+    background: var(--surface2);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Pattern grid */
+  .pattern-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .pattern-thumb {
+    aspect-ratio: 1.75;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color .2s, transform .15s;
+    overflow: hidden;
+  }
+  .pattern-thumb:hover { transform: scale(1.05); }
+  .pattern-thumb.active { border-color: var(--accent); }
+
+  /* Template row */
+  .template-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .template-thumb {
+    width: 100px;
+    height: 58px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .65rem;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: .04em;
+    transition: border-color .2s, transform .15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .template-thumb:hover { transform: scale(1.04); border-color: var(--accent); }
+  .template-thumb.active { border-color: var(--accent); }
+
+  /* ─── Main canvas area ─── */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 20px;
+    min-width: 0;
+  }
+
+  /* View toggle */
+  .view-toggle {
+    display: flex;
+    gap: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .view-btn {
+    padding: 8px 20px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: .82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .03em;
+  }
+  .view-btn.active { background: var(--accent); color: #111; }
+
+  /* Card stage */
+  .card-stage {
+    perspective: 1200px;
+    margin-bottom: 28px;
+  }
+
+  .card-flipper {
+    width: var(--card-w);
+    height: var(--card-h);
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform .7s cubic-bezier(.4,0,.2,1);
+  }
+  .card-flipper.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: default;
+  }
+  .card-back-face { transform: rotateY(180deg); }
+
+  /* Card inner layout */
+  .card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 28px;
+  }
+
+  .card-name {
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+  .card-title {
+    opacity: .75;
+    margin-bottom: 12px;
+  }
+  .card-contact { font-size: .72rem; opacity: .85; line-height: 1.8; }
+  .card-logo {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    opacity: .9;
+  }
+
+  .card-back-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .card-tagline {
+    font-style: italic;
+    text-align: center;
+    padding: 24px;
+    line-height: 1.5;
+    opacity: .9;
+  }
+  .card-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  /* ─── Action buttons ─── */
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    border: none;
+    letter-spacing: .03em;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-primary { background: var(--accent); color: #111; }
+  .btn-primary:hover { background: #f7d060; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .btn-danger { background: #c0392b; color: #fff; }
+  .btn-danger:hover { background: #e74c3c; }
+
+  /* ─── Right panel ─── */
+  .right-panel {
+    width: 180px;
+    flex-shrink: 0;
+    padding: 16px 12px;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ─── Font size label ─── */
+  .size-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .size-val {
+    font-size: .78rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ─── Toast ─── */
+  #toast {
+    position: fixed;
+    bottom: 28px; right: 28px;
+    background: var(--accent);
+    color: #111;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: .85rem;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all .35s cubic-bezier(.4,0,.2,1);
+    z-index: 9999;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ─── Scrollbar ─── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+  /* ─── Print styles ─── */
+  @media print {
+    body * { visibility: hidden; }
+    #print-area, #print-area * { visibility: visible; }
+    #print-area {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: white;
+    }
+  }
+
+  /* ─── Responsive ─── */
+  @media (max-width: 900px) {
+    .right-panel { display: none; }
+    .sidebar { width: 240px; }
+    :root { --card-w: 300px; --card-h: 174px; }
+  }
+  @media (max-width: 640px) {
+    .sidebar { width: 200px; }
+    :root { --card-w: 260px; --card-h: 150px; }
+    .wrapper { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: 320px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header>
+  <div class="logo">Card<span>Craft</span> Pro</div>
+  <div class="header-actions">
+    <button class="btn btn-secondary" onclick="resetCard()">⟳ Reset</button>
+    <button class="btn btn-primary" onclick="exportPNG()">⬇ Export PNG</button>
+    <button class="btn btn-secondary" onclick="printCard()">🖨 Print</button>
+  </div>
+</header>
+
+<!-- ═══════════════ TOP AD ═══════════════ -->
+<div style="padding:0 28px">
+  <div class="ad-banner ad-top">
+    <!-- Google AdSense Top Banner 728×90 -->
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:728px;height:90px"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1234567890"></ins>
+    <span style="display:none">Advertisement</span>
+    <!-- Placeholder label shown when ads not loaded -->
+    <span>📢 Ad Space — 728×90 Leaderboard</span>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN WRAPPER ═══════════════ -->
+<div class="wrapper">
+
+  <!-- ─── LEFT SIDEBAR ─── -->
+  <aside class="sidebar">
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('content',this)">Content</button>
+      <button class="tab-btn" onclick="switchTab('style',this)">Style</button>
+      <button class="tab-btn" onclick="switchTab('back',this)">Back</button>
+    </div>
+
+    <!-- ── CONTENT TAB ── -->
+    <div id="tab-content">
+      <div class="ctrl-group">
+        <label class="ctrl-label">Full Name</label>
+        <input type="text" id="inp-name" value="Priya Sharma" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Job Title</label>
+        <input type="text" id="inp-title" value="Chartered Accountant" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Company / Logo Text</label>
+        <input type="text" id="inp-company" value="PS Associates" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Email</label>
+        <input type="email" id="inp-email" value="priya@psassociates.in" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Phone</label>
+        <input type="tel" id="inp-phone" value="+91 98765 43210" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Website</label>
+        <input type="text" id="inp-website" value="www.psassociates.in" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Address</label>
+        <textarea id="inp-address" oninput="update()">Civil Lines, Raipur, CG 492001</textarea>
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Front Tagline (optional)</label>
+        <input type="text" id="inp-tagline-front" value="" placeholder="e.g. GST Expert" oninput="update()">
+      </div>
+    </div>
+
+    <!-- ── STYLE TAB ── -->
+    <div id="tab-style" style="display:none">
+      <div class="section-label">Templates</div>
+      <div class="template-row" id="template-row"></div>
+
+      <div class="section-label">Background Pattern</div>
+      <div class="pattern-grid" id="pattern-grid"></div>
+
+      <div class="section-label">Text Alignment</div>
+      <div class="btn-group" style="margin-bottom:12px">
+        <button class="icon-btn active" id="align-left" onclick="setAlign('left',this)" title="Left">≡⬅</button>
+        <button class="icon-btn" id="align-center" onclick="setAlign('center',this)" title="Center">≡☰</button>
+        <button class="icon-btn" id="align-right" onclick="setAlign('right',this)" title="Right">≡➡</button>
+      </div>
+
+      <div class="section-label">Font Family</div>
+      <div class="ctrl-group">
+        <select id="sel-font" onchange="update()">
+          <option value="'DM Sans',sans-serif">DM Sans (Modern)</option>
+          <option value="'Playfair Display',serif">Playfair Display (Classic)</option>
+          <option value="'Crimson Pro',serif">Crimson Pro (Editorial)</option>
+          <option value="Georgia,serif">Georgia (Traditional)</option>
+          <option value="'Courier New',monospace">Courier New (Typewriter)</option>
+        </select>
+      </div>
+
+      <div class="section-label">Name Size</div>
+      <div class="size-row">
+        <label class="ctrl-label" style="margin:0">px</label>
+        <span class="size-val" id="name-size-val">22</span>
+      </div>
+      <input type="range" id="name-size" min="14" max="36" value="22" oninput="document.getElementById('name-size-val').textContent=this.value;update()">
+
+      <div class="section-label">Text Colors</div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Name Color</label>
+        <input type="color" id="col-name" value="#ffffff" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Body Text Color</label>
+        <input type="color" id="col-body" value="#e8e9ed" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Accent / Logo Color</label>
+        <input type="color" id="col-accent" value="#f0c040" oninput="update()">
+      </div>
+
+      <div class="section-label">Card Background</div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">BG Color 1</label>
+        <input type="color" id="col-bg1" value="#16181f" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">BG Color 2</label>
+        <input type="color" id="col-bg2" value="#1e2029" oninput="update()">
+      </div>
+
+      <div class="section-label">Border Radius</div>
+      <div class="size-row">
+        <label class="ctrl-label" style="margin:0">px</label>
+        <span class="size-val" id="radius-val">16</span>
+      </div>
+      <input type="range" id="card-radius" min="0" max="40" value="16" oninput="document.getElementById('radius-val').textContent=this.value;update()">
+    </div>
+
+    <!-- ── BACK TAB ── -->
+    <div id="tab-back" style="display:none">
+      <div class="ctrl-group">
+        <label class="ctrl-label">Back Tagline</label>
+        <textarea id="inp-back-tagline" oninput="update()">Trusted by 200+ Businesses
+GST • ITR • Audit • Advisory</textarea>
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Back Tagline Font Size</label>
+        <input type="range" id="back-font-size" min="10" max="28" value="15" oninput="update()">
+      </div>
+      <div class="section-label">Back Design</div>
+      <div class="btn-group" style="flex-wrap:wrap;gap:6px">
+        <button class="icon-btn active" id="back-plain" onclick="setBackDesign('plain',this)">Plain</button>
+        <button class="icon-btn" id="back-diagonal" onclick="setBackDesign('diagonal',this)">Diagonal</button>
+        <button class="icon-btn" id="back-circles" onclick="setBackDesign('circles',this)">Circles</button>
+        <button class="icon-btn" id="back-lines" onclick="setBackDesign('lines',this)">Lines</button>
+      </div>
+      <div class="section-label">Back Colors</div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">BG Color</label>
+        <input type="color" id="col-back-bg" value="#0e0f13" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Text Color</label>
+        <input type="color" id="col-back-text" value="#e8e9ed" oninput="update()">
+      </div>
+      <div class="ctrl-group">
+        <label class="ctrl-label">Decoration Color</label>
+        <input type="color" id="col-back-deco" value="#f0c040" oninput="update()">
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ─── MAIN CANVAS ─── -->
+  <main class="main">
+
+    <div class="view-toggle">
+      <button class="view-btn active" onclick="setView('front',this)">Front</button>
+      <button class="view-btn" onclick="setView('back',this)">Back</button>
+      <button class="view-btn" onclick="setView('flip',this)">3D Flip</button>
+    </div>
+
+    <div class="card-stage">
+      <div class="card-flipper" id="card-flipper">
+
+        <!-- FRONT FACE -->
+        <div class="card-face" id="card-front">
+          <div class="card-inner" id="card-inner">
+            <div class="card-logo" id="card-logo">PS Associates</div>
+            <div class="card-name" id="card-name">Priya Sharma</div>
+            <div class="card-title" id="card-title-el">Chartered Accountant</div>
+            <div class="card-contact" id="card-contact">
+              <div>✉ priya@psassociates.in</div>
+              <div>📞 +91 98765 43210</div>
+              <div>🌐 www.psassociates.in</div>
+              <div>📍 Civil Lines, Raipur, CG 492001</div>
+            </div>
+            <canvas class="card-decoration" id="front-deco-canvas"></canvas>
+          </div>
+        </div>
+
+        <!-- BACK FACE -->
+        <div class="card-face card-back-face" id="card-back">
+          <div class="card-back-inner" id="card-back-inner">
+            <canvas class="card-decoration" id="back-deco-canvas"></canvas>
+            <div class="card-tagline" id="card-tagline">Trusted by 200+ Businesses<br>GST • ITR • Audit • Advisory</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="exportPNG()">⬇ Download PNG</button>
+      <button class="btn btn-secondary" onclick="exportBothPNG()">⬇ Both Sides</button>
+      <button class="btn btn-secondary" onclick="printCard()">🖨 Print (300dpi)</button>
+      <button class="btn btn-secondary" onclick="copyCSS()">📋 Copy CSS</button>
+    </div>
+
+    <!-- Bottom Ad -->
+    <div class="ad-banner" style="width:100%;max-width:728px;height:90px;margin-top:28px">
+      <!-- Google AdSense Bottom Banner -->
+      <ins class="adsbygoogle"
+           style="display:inline-block;width:728px;height:90px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="0987654321"></ins>
+      <span>📢 Ad Space — 728×90 Leaderboard</span>
+    </div>
+
+  </main>
+
+  <!-- ─── RIGHT PANEL ─── -->
+  <aside class="right-panel">
+    <div class="section-label" style="margin-top:0">Quick Colors</div>
+    <div class="color-row" id="quick-colors"></div>
+
+    <div class="section-label">Card Size</div>
+    <div style="font-size:.72rem;color:var(--text-dim);line-height:1.7">
+      Standard:<br>
+      3.5" × 2"<br>
+      88.9 × 50.8mm<br>
+      354 × 204px
+    </div>
+
+    <div class="section-label">Export DPI</div>
+    <select id="sel-dpi" style="width:100%">
+      <option value="2">Standard (2x)</option>
+      <option value="3" selected>High (3x)</option>
+      <option value="4">Print (4x)</option>
+    </select>
+
+    <div class="section-label">Shortcuts</div>
+    <div style="font-size:.7rem;color:var(--text-dim);line-height:2">
+      F — Flip card<br>
+      Ctrl+E — Export<br>
+      Ctrl+P — Print<br>
+      R — Reset
+    </div>
+
+    <!-- Side Ad -->
+    <div class="ad-banner" style="width:100%;min-height:250px;margin-top:auto;flex:1">
+      <ins class="adsbygoogle"
+           style="display:block;width:160px;height:250px"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="1122334455"></ins>
+      <span>📢 Ad Space<br>160×250</span>
+    </div>
+  </aside>
+
+</div>
+
+<!-- Hidden print area -->
+<div id="print-area" style="display:none"></div>
+<div id="toast">✓ Copied to clipboard!</div>
+
+<!-- html2canvas for export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+// ═══════════════════════════════════════════
+//   STATE
+// ═══════════════════════════════════════════
+const state = {
+  align: 'left',
+  pattern: 'none',
+  backDesign: 'plain',
+  template: 0,
+  view: 'front',
+};
+
+// ═══════════════════════════════════════════
+//   TEMPLATES
+// ═══════════════════════════════════════════
+const templates = [
+  { name:'Dark Pro',    bg1:'#16181f', bg2:'#1e2029', tc:'#ffffff', bc:'#e8e9ed', ac:'#f0c040', backBg:'#0e0f13', backTc:'#e8e9ed', backDc:'#f0c040' },
+  { name:'Navy Gold',   bg1:'#0a1628', bg2:'#122040', tc:'#ffd700', bc:'#ccd6f6', ac:'#ffd700', backBg:'#0a1628', backTc:'#ccd6f6', backDc:'#ffd700' },
+  { name:'Forest',      bg1:'#1a2e1a', bg2:'#243d24', tc:'#98fb98', bc:'#d4f0d4', ac:'#7fff00', backBg:'#152015', backTc:'#d4f0d4', backDc:'#7fff00' },
+  { name:'Crimson',     bg1:'#1a0a0a', bg2:'#2d1010', tc:'#ff8080', bc:'#f0d0d0', ac:'#ff4444', backBg:'#150808', backTc:'#f0d0d0', backDc:'#ff4444' },
+  { name:'Clean White', bg1:'#ffffff', bg2:'#f5f5f5', tc:'#1a1a2e', bc:'#444',    ac:'#0070f3', backBg:'#f0f4ff', backTc:'#1a1a2e', backDc:'#0070f3' },
+  { name:'Slate',       bg1:'#1e293b', bg2:'#334155', tc:'#e2e8f0', bc:'#cbd5e1', ac:'#38bdf8', backBg:'#0f172a', backTc:'#e2e8f0', backDc:'#38bdf8' },
+  { name:'Warm Ivory',  bg1:'#fdf6e3', bg2:'#faecc6', tc:'#5c4a1e', bc:'#7a6030', ac:'#c07a20', backBg:'#f9edd8', backTc:'#5c4a1e', backDc:'#c07a20' },
+  { name:'Purple',      bg1:'#1a0933', bg2:'#2d1060', tc:'#e8b4ff', bc:'#d4c0ff', ac:'#bb86fc', backBg:'#130826', backTc:'#d4c0ff', backDc:'#bb86fc' },
+];
+
+// ═══════════════════════════════════════════
+//   PATTERNS
+// ═══════════════════════════════════════════
+const patterns = [
+  { id:'none',      name:'None',      fn: null },
+  { id:'dots',      name:'Dots',      fn: drawDots },
+  { id:'grid',      name:'Grid',      fn: drawGrid },
+  { id:'diagonal',  name:'Diagonal',  fn: drawDiagonalLines },
+  { id:'circles',   name:'Circles',   fn: drawCircles },
+  { id:'hexagons',  name:'Hex',       fn: drawHexagons },
+  { id:'waves',     name:'Waves',     fn: drawWaves },
+  { id:'noise',     name:'Noise',     fn: drawNoise },
+  { id:'chevron',   name:'Chevron',   fn: drawChevron },
+  { id:'diamond',   name:'Diamond',   fn: drawDiamond },
+  { id:'crosses',   name:'Crosses',   fn: drawCrosses },
+  { id:'triangles', name:'Triangles', fn: drawTriangles },
+];
+
+// ═══════════════════════════════════════════
+//   INIT TEMPLATE THUMBS
+// ═══════════════════════════════════════════
+function initTemplates() {
+  const row = document.getElementById('template-row');
+  templates.forEach((t, i) => {
+    const d = document.createElement('div');
+    d.className = 'template-thumb' + (i === 0 ? ' active' : '');
+    d.style.background = `linear-gradient(135deg, ${t.bg1}, ${t.bg2})`;
+    d.style.color = t.tc;
+    d.textContent = t.name;
+    d.onclick = () => {
+      document.querySelectorAll('.template-thumb').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');
+      applyTemplate(i);
+    };
+    row.appendChild(d);
+  });
+}
+
+function applyTemplate(i) {
+  const t = templates[i];
+  document.getElementById('col-bg1').value = t.bg1;
+  document.getElementById('col-bg2').value = t.bg2;
+  document.getElementById('col-name').value = t.tc;
+  document.getElementById('col-body').value = t.bc;
+  document.getElementById('col-accent').value = t.ac;
+  document.getElementById('col-back-bg').value = t.backBg;
+  document.getElementById('col-back-text').value = t.backTc;
+  document.getElementById('col-back-deco').value = t.backDc;
+  state.template = i;
+  update();
+}
+
+// ═══════════════════════════════════════════
+//   INIT PATTERN THUMBS
+// ═══════════════════════════════════════════
+function initPatterns() {
+  const grid = document.getElementById('pattern-grid');
+  patterns.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'pattern-thumb' + (i === 0 ? ' active' : '');
+    d.title = p.name;
+    // Draw mini preview
+    const cvs = document.createElement('canvas');
+    cvs.width = 60; cvs.height = 34;
+    const ctx = cvs.getContext('2d');
+    ctx.fillStyle = '#1e2029';
+    ctx.fillRect(0,0,60,34);
+    if(p.fn) p.fn(ctx, 60, 34, '#f0c04030', 8);
+    d.appendChild(cvs);
+    d.onclick = () => {
+      document.querySelectorAll('.pattern-thumb').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');
+      state.pattern = p.id;
+      update();
+    };
+    grid.appendChild(d);
+  });
+}
+
+// ═══════════════════════════════════════════
+//   INIT QUICK COLORS
+// ═══════════════════════════════════════════
+const quickPalettes = [
+  '#f0c040','#e07a30','#38bdf8','#7fff00','#ff8080',
+  '#bb86fc','#ffd700','#00ffa0','#ff6b6b','#4ecdc4',
+];
+function initQuickColors() {
+  const row = document.getElementById('quick-colors');
+  quickPalettes.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'color-swatch';
+    d.style.background = c;
+    d.onclick = () => {
+      document.getElementById('col-accent').value = c;
+      update();
+    };
+    row.appendChild(d);
+  });
+}
+
+// ═══════════════════════════════════════════
+//   PATTERN DRAW FUNCTIONS
+// ═══════════════════════════════════════════
+function drawDots(ctx, w, h, color, size=10) {
+  ctx.fillStyle = color || 'rgba(255,255,255,0.1)';
+  const r = size/4;
+  for(let x=size/2;x<w;x+=size) for(let y=size/2;y<h;y+=size) {
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+}
+function drawGrid(ctx, w, h, color, size=20) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 0.8;
+  for(let x=0;x<=w;x+=size) { ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke(); }
+  for(let y=0;y<=h;y+=size) { ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke(); }
+}
+function drawDiagonalLines(ctx, w, h, color, size=20) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for(let i=-h;i<w+h;i+=size) {
+    ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+h,h);ctx.stroke();
+  }
+}
+function drawCircles(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  const cx=w/2, cy=h/2;
+  for(let r=20;r<Math.max(w,h);r+=25) {
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke();
+  }
+}
+function drawHexagons(ctx, w, h, color) {
+  const c = color || 'rgba(255,255,255,0.08)';
+  ctx.strokeStyle = c; ctx.lineWidth = 0.8;
+  const size=18, vert=size*Math.sqrt(3);
+  for(let row=0;row*vert*0.75<h+size;row++) {
+    for(let col=0;col*size*2<w+size;col++) {
+      const x = col*size*2 + (row%2)*size;
+      const y = row*vert*0.75;
+      ctx.beginPath();
+      for(let i=0;i<6;i++) {
+        const a=Math.PI/180*(60*i-30);
+        const px=x+size*Math.cos(a), py=y+size*Math.sin(a);
+        i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+      }
+      ctx.closePath(); ctx.stroke();
+    }
+  }
+}
+function drawWaves(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1.2;
+  for(let y=10;y<h;y+=18) {
+    ctx.beginPath();
+    for(let x=0;x<=w;x+=2) {
+      const py = y + Math.sin(x*0.04)*6;
+      x===0?ctx.moveTo(x,py):ctx.lineTo(x,py);
+    }
+    ctx.stroke();
+  }
+}
+function drawNoise(ctx, w, h, color) {
+  const c = color || 'rgba(255,255,255,0.12)';
+  for(let i=0;i<800;i++) {
+    ctx.fillStyle = c;
+    ctx.fillRect(Math.random()*w, Math.random()*h, 1, 1);
+  }
+}
+function drawChevron(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for(let y=-20;y<h+20;y+=18) {
+    ctx.beginPath();
+    for(let x=0;x<=w;x+=2) {
+      const py = y + Math.abs(((x%20)-10))*1.2;
+      x===0?ctx.moveTo(x,py):ctx.lineTo(x,py);
+    }
+    ctx.stroke();
+  }
+}
+function drawDiamond(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 0.8;
+  const s=22;
+  for(let x=-s;x<w+s;x+=s) {
+    for(let y=-s;y<h+s;y+=s) {
+      ctx.beginPath();
+      ctx.moveTo(x,y-s/2);
+      ctx.lineTo(x+s/2,y);
+      ctx.lineTo(x,y+s/2);
+      ctx.lineTo(x-s/2,y);
+      ctx.closePath(); ctx.stroke();
+    }
+  }
+}
+function drawCrosses(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.1)';
+  ctx.lineWidth = 1;
+  const s=20;
+  for(let x=s/2;x<w;x+=s) for(let y=s/2;y<h;y+=s) {
+    const t=4;
+    ctx.beginPath();ctx.moveTo(x-t,y);ctx.lineTo(x+t,y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x,y-t);ctx.lineTo(x,y+t);ctx.stroke();
+  }
+}
+function drawTriangles(ctx, w, h, color) {
+  ctx.strokeStyle = color || 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 0.8;
+  const s=24;
+  for(let x=-s;x<w+s;x+=s) {
+    for(let y=-s;y<h+s;y+=s) {
+      ctx.beginPath();
+      ctx.moveTo(x,y+s);ctx.lineTo(x+s/2,y);ctx.lineTo(x+s,y+s);ctx.closePath();ctx.stroke();
+    }
+  }
+}
+
+// ═══════════════════════════════════════════
+//   BACK DESIGNS
+// ═══════════════════════════════════════════
+function renderBackDecoration(canvas, bg, decoColor, design) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth || 354;
+  canvas.height = canvas.offsetHeight || 204;
+  const w = canvas.width, h = canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  if(design==='diagonal') {
+    for(let i=-h;i<w+h;i+=30) {
+      ctx.strokeStyle = decoColor+'33';
+      ctx.lineWidth=2;
+      ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i+h,h);ctx.stroke();
+    }
+    // Corner accent
+    ctx.strokeStyle = decoColor+'88';
+    ctx.lineWidth = 3;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(60,0);ctx.lineTo(0,60);ctx.closePath();ctx.stroke();
+    ctx.beginPath();ctx.moveTo(w,h);ctx.lineTo(w-60,h);ctx.lineTo(w,h-60);ctx.closePath();ctx.stroke();
+  } else if(design==='circles') {
+    ctx.strokeStyle = decoColor+'22';
+    [[-40,-40],[w+40,-40],[-40,h+40],[w+40,h+40]].forEach(([cx,cy])=>{
+      for(let r=40;r<200;r+=30){
+        ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.lineWidth=1.5;ctx.stroke();
+      }
+    });
+    ctx.strokeStyle = decoColor+'55';
+    ctx.lineWidth=2;
+    ctx.beginPath();ctx.arc(w/2,h/2,h*0.6,0,Math.PI*2);ctx.stroke();
+  } else if(design==='lines') {
+    for(let y=0;y<h;y+=16) {
+      const alpha = Math.sin(y/h*Math.PI)*0.12+0.04;
+      ctx.strokeStyle = decoColor+Math.round(alpha*255).toString(16).padStart(2,'0');
+      ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();
+    }
+    // Vertical accent bars
+    ctx.fillStyle = decoColor+'20';
+    ctx.fillRect(0,0,6,h);
+    ctx.fillRect(w-6,0,6,h);
+  }
+}
+
+// ═══════════════════════════════════════════
+//   MAIN UPDATE
+// ═══════════════════════════════════════════
+function update() {
+  const name     = document.getElementById('inp-name').value;
+  const title    = document.getElementById('inp-title').value;
+  const company  = document.getElementById('inp-company').value;
+  const email    = document.getElementById('inp-email').value;
+  const phone    = document.getElementById('inp-phone').value;
+  const website  = document.getElementById('inp-website').value;
+  const address  = document.getElementById('inp-address').value;
+  const tagFront = document.getElementById('inp-tagline-front').value;
+  const backTag  = document.getElementById('inp-back-tagline').value;
+  const backFs   = document.getElementById('back-font-size').value;
+
+  const bg1     = document.getElementById('col-bg1').value;
+  const bg2     = document.getElementById('col-bg2').value;
+  const nameC   = document.getElementById('col-name').value;
+  const bodyC   = document.getElementById('col-body').value;
+  const accentC = document.getElementById('col-accent').value;
+  const font    = document.getElementById('sel-font').value;
+  const nameFs  = document.getElementById('name-size').value;
+  const radius  = document.getElementById('card-radius').value;
+
+  const backBg  = document.getElementById('col-back-bg').value;
+  const backTc  = document.getElementById('col-back-text').value;
+  const backDc  = document.getElementById('col-back-deco').value;
+
+  // ── FRONT ──
+  const cardFront = document.getElementById('card-front');
+  cardFront.style.borderRadius = radius + 'px';
+  cardFront.style.background = `linear-gradient(135deg, ${bg1}, ${bg2})`;
+
+  const inner = document.getElementById('card-inner');
+  inner.style.fontFamily = font;
+  inner.style.textAlign = state.align;
+
+  document.getElementById('card-name').style.color = nameC;
+  document.getElementById('card-name').style.fontSize = nameFs + 'px';
+  document.getElementById('card-name').textContent = name;
+
+  document.getElementById('card-title-el').style.color = bodyC;
+  document.getElementById('card-title-el').style.fontFamily = font;
+  document.getElementById('card-title-el').style.fontSize = Math.round(nameFs*0.6)+'px';
+  document.getElementById('card-title-el').textContent = tagFront ? title + ' · ' + tagFront : title;
+
+  document.getElementById('card-logo').style.color = accentC;
+  document.getElementById('card-logo').style.fontFamily = font;
+  document.getElementById('card-logo').textContent = company;
+
+  const contact = document.getElementById('card-contact');
+  contact.style.color = bodyC;
+  contact.style.fontFamily = font;
+  contact.innerHTML = '';
+  if(email)   contact.innerHTML += `<div>✉ ${email}</div>`;
+  if(phone)   contact.innerHTML += `<div>📞 ${phone}</div>`;
+  if(website) contact.innerHTML += `<div>🌐 ${website}</div>`;
+  if(address) contact.innerHTML += `<div>📍 ${address.replace(/\n/g,'<br>')}</div>`;
+
+  // Draw front pattern
+  const frontCanvas = document.getElementById('front-deco-canvas');
+  const fCtx = frontCanvas.getContext('2d');
+  frontCanvas.width = frontCanvas.offsetWidth || 354;
+  frontCanvas.height = frontCanvas.offsetHeight || 204;
+  fCtx.clearRect(0,0,frontCanvas.width,frontCanvas.height);
+  const pObj = patterns.find(p=>p.id===state.pattern);
+  if(pObj && pObj.fn) pObj.fn(fCtx, frontCanvas.width, frontCanvas.height, accentC+'22');
+
+  // ── BACK ──
+  const cardBack = document.getElementById('card-back');
+  cardBack.style.borderRadius = radius + 'px';
+  cardBack.style.background = backBg;
+
+  const taglineEl = document.getElementById('card-tagline');
+  taglineEl.style.color = backTc;
+  taglineEl.style.fontFamily = font;
+  taglineEl.style.fontSize = backFs + 'px';
+  taglineEl.innerHTML = backTag.replace(/\n/g,'<br>');
+
+  renderBackDecoration(
+    document.getElementById('back-deco-canvas'),
+    backBg, backDc, state.backDesign
+  );
+}
+
+// ═══════════════════════════════════════════
+//   VIEW CONTROLS
+// ═══════════════════════════════════════════
+function setView(v, btn) {
+  state.view = v;
+  document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const flipper = document.getElementById('card-flipper');
+
+  if(v==='front')  flipper.classList.remove('flipped');
+  else if(v==='back') flipper.classList.add('flipped');
+  else {
+    flipper.classList.toggle('flipped');
+    setTimeout(()=>{ flipper.classList.toggle('flipped'); }, 900);
+  }
+}
+
+function setAlign(a, btn) {
+  state.align = a;
+  document.querySelectorAll('#align-left,#align-center,#align-right').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  update();
+}
+
+function setBackDesign(d, btn) {
+  state.backDesign = d;
+  document.querySelectorAll('#back-plain,#back-diagonal,#back-circles,#back-lines').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  update();
+}
+
+function switchTab(tab, btn) {
+  ['content','style','back'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════
+//   EXPORT PNG
+// ═══════════════════════════════════════════
+async function captureCard(face) {
+  const dpr = parseInt(document.getElementById('sel-dpi').value);
+  const el = face === 'front'
+    ? document.getElementById('card-front')
+    : document.getElementById('card-back');
+
+  // Ensure back is visible for capture
+  const flipper = document.getElementById('card-flipper');
+  const wasFlipped = flipper.classList.contains('flipped');
+  if(face==='back') flipper.style.transform = 'rotateY(0deg)';
+  const origTransform = document.getElementById('card-back').style.transform;
+  if(face==='back') document.getElementById('card-back').style.transform = 'none';
+
+  const canvas = await html2canvas(el, {
+    scale: dpr,
+    useCORS: true,
+    backgroundColor: null,
+    logging: false,
+  });
+
+  if(face==='back') {
+    document.getElementById('card-back').style.transform = origTransform;
+    if(!wasFlipped) flipper.style.transform = '';
+    else flipper.style.transform = 'rotateY(180deg)';
+  }
+
+  return canvas;
+}
+
+async function exportPNG() {
+  showToast('Exporting…');
+  const canvas = await captureCard('front');
+  const link = document.createElement('a');
+  link.download = 'business-card-front.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  showToast('✓ Front saved!');
+}
+
+async function exportBothPNG() {
+  showToast('Exporting both sides…');
+  const front = await captureCard('front');
+  const back  = await captureCard('back');
+
+  [front, back].forEach((c, i) => {
+    const link = document.createElement('a');
+    link.download = `business-card-${i===0?'front':'back'}.png`;
+    link.href = c.toDataURL('image/png');
+    setTimeout(()=>link.click(), i*500);
+  });
+  showToast('✓ Both sides saved!');
+}
+
+// ═══════════════════════════════════════════
+//   PRINT
+// ═══════════════════════════════════════════
+async function printCard() {
+  const canvas = await captureCard('front');
+  const dataURL = canvas.toDataURL('image/png');
+  const win = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>Print Business Card</title>
+  <style>
+    body{margin:0;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f0f0f0;}
+    .card{width:3.5in;height:2in;border-radius:16px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.3);}
+    img{width:100%;height:100%;display:block;}
+    @media print{body{background:white;}.card{box-shadow:none;}}
+    .hint{font-family:sans-serif;font-size:12px;color:#888;margin-top:16px;text-align:center;}
+    button{margin-top:12px;padding:8px 20px;background:#222;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;}
+  </style></head><body>
+  <div style="text-align:center">
+    <div class="card"><img src="${dataURL}"></div>
+    <div class="hint">Standard size: 3.5" × 2" | Print at 300dpi for best quality</div>
+    <button onclick="window.print()">🖨 Print Now</button>
+  </div>
+  </body></html>`);
+  win.document.close();
+}
+
+// ═══════════════════════════════════════════
+//   COPY CSS
+// ═══════════════════════════════════════════
+function copyCSS() {
+  const bg1    = document.getElementById('col-bg1').value;
+  const bg2    = document.getElementById('col-bg2').value;
+  const nameC  = document.getElementById('col-name').value;
+  const bodyC  = document.getElementById('col-body').value;
+  const accentC= document.getElementById('col-accent').value;
+  const radius = document.getElementById('card-radius').value;
+  const css = `.business-card {
+  width: 354px;
+  height: 204px;
+  border-radius: ${radius}px;
+  background: linear-gradient(135deg, ${bg1}, ${bg2});
+  padding: 24px 28px;
+  font-family: 'DM Sans', sans-serif;
+  color: ${bodyC};
+}
+.card-name { color: ${nameC}; font-size: ${document.getElementById('name-size').value}px; font-weight: 700; }
+.card-accent { color: ${accentC}; }`;
+  navigator.clipboard.writeText(css).then(()=>showToast('✓ CSS Copied!'));
+}
+
+// ═══════════════════════════════════════════
+//   RESET
+// ═══════════════════════════════════════════
+function resetCard() {
+  document.getElementById('inp-name').value    = 'Priya Sharma';
+  document.getElementById('inp-title').value   = 'Chartered Accountant';
+  document.getElementById('inp-company').value = 'PS Associates';
+  document.getElementById('inp-email').value   = 'priya@psassociates.in';
+  document.getElementById('inp-phone').value   = '+91 98765 43210';
+  document.getElementById('inp-website').value = 'www.psassociates.in';
+  document.getElementById('inp-address').value = 'Civil Lines, Raipur, CG 492001';
+  document.getElementById('inp-tagline-front').value = '';
+  document.getElementById('inp-back-tagline').value = 'Trusted by 200+ Businesses\nGST • ITR • Audit • Advisory';
+  applyTemplate(0);
+  state.pattern = 'none';
+  state.align = 'left';
+  state.backDesign = 'plain';
+  document.querySelectorAll('.pattern-thumb').forEach((x,i)=>x.classList.toggle('active',i===0));
+  document.getElementById('align-left').classList.add('active');
+  document.getElementById('align-center').classList.remove('active');
+  document.getElementById('align-right').classList.remove('active');
+  document.getElementById('back-plain').classList.add('active');
+  ['back-diagonal','back-circles','back-lines'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('name-size').value = 22;
+  document.getElementById('name-size-val').textContent = 22;
+  document.getElementById('card-radius').value = 16;
+  document.getElementById('radius-val').textContent = 16;
+  document.getElementById('back-font-size').value = 15;
+  update();
+  showToast('✓ Reset done!');
+}
+
+// ═══════════════════════════════════════════
+//   TOAST
+// ═══════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+// ═══════════════════════════════════════════
+//   KEYBOARD SHORTCUTS
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if(e.key.toLowerCase()==='f' && !e.target.matches('input,textarea,select')) {
+    const flipper = document.getElementById('card-flipper');
+    flipper.classList.toggle('flipped');
+  }
+  if(e.ctrlKey && e.key.toLowerCase()==='e') { e.preventDefault(); exportPNG(); }
+  if(e.ctrlKey && e.key.toLowerCase()==='p') { e.preventDefault(); printCard(); }
+  if(e.key.toLowerCase()==='r' && !e.ctrlKey && !e.target.matches('input,textarea,select')) resetCard();
+});
+
+// ═══════════════════════════════════════════
+//   INIT
+// ═══════════════════════════════════════════
+initTemplates();
+initPatterns();
+initQuickColors();
+update();
+
+// Load AdSense
+(adsbygoogle = window.adsbygoogle || []).push({});
+(adsbygoogle = window.adsbygoogle || []).push({});
+(adsbygoogle = window.adsbygoogle || []).push({});
+
+</script>
+</body>
+</html>
